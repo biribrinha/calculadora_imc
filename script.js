@@ -25,10 +25,11 @@ function calculaImc(event) {
 
     let imc = calcular(dadosUsuario.altura, dadosUsuario.peso);
 
+    let classificacaoImc = classificarImc(imc);
 
-    
+    let usuarioAtualizado = organizarDados(dadosUsuario, imc, classificacaoImc);
 
-    console.log(classificarImc(imc));
+    cadastrarUsuario(usuarioAtualizado);
 
 }
 
@@ -96,3 +97,49 @@ function classificarImc(imc) {
     }
 
 }
+
+
+// Passo 4 - Organizar as informações
+
+function organizarDados(dadosUsuario, valorImc, classificarImc) {
+
+    let dataHoraAtual = Intl.DateTimeFormat('pt-BR', { timeStyle: 'long', dateStyle: 'short' }).format(Date.now()) //Intl é uma biblioteca utilizada pra formatação geral de dados que são coletados no sistema, DateTimeFormat() é uma função que foi chamada especificando que é uma data para ser formatada
+
+
+    let dadosUsuarioAtualizado = {
+        ...dadosUsuario,
+        imc: valorImc.toFixed(2),
+        classificacao: classificarImc,
+        dataCadastro: dataHoraAtual
+    }
+
+    console.log(dadosUsuarioAtualizado);
+
+    return dadosUsuarioAtualizado;
+
+}
+
+
+// Parte 5 - Salvar os dados na lista
+
+function cadastrarUsuario(usuario) {
+
+    let listaUsuarios = [];
+
+    // if (localStorage.getItem("usuariosCadastrados") == true) {
+        // quando nao tem comparacao, ele identifica como == true
+    if (localStorage.getItem("usuariosCadastrados")) {
+        listaUsuarios = JSON.parse(localStorage.getItem("usuariosCadastrados"));
+    }
+
+
+    //pegando o usuario e passando pra lista
+    listaUsuarios.push(usuario)
+
+    localStorage.setItem("usuariosCadastrados", JSON.stringify(listaUsuarios))
+
+    // setItem altera o localStorage
+}
+
+
+//passo 8 - listar
