@@ -14,7 +14,6 @@
 
 // função principal, o html só chama essa função
 function calculaImc(event) {
-    event.preventDefault()
 
     console.log("funciono!!!!!!!!!!!!");
 
@@ -127,7 +126,7 @@ function cadastrarUsuario(usuario) {
     let listaUsuarios = [];
 
     // if (localStorage.getItem("usuariosCadastrados") == true) {
-        // quando nao tem comparacao, ele identifica como == true
+    // quando nao tem comparacao, ele identifica como == true
     if (localStorage.getItem("usuariosCadastrados")) {
         listaUsuarios = JSON.parse(localStorage.getItem("usuariosCadastrados"));
     }
@@ -142,4 +141,55 @@ function cadastrarUsuario(usuario) {
 }
 
 
-//passo 8 - listar
+//passo 6 - listar
+
+function carregarUsuarios() {
+    let listaUsuarios = [];
+
+    if (localStorage.getItem("usuariosCadastrados")) {
+        listaUsuarios = JSON.parse(localStorage.getItem("usuariosCadastrados"));
+    }
+
+    if (listaUsuarios.length == 0) {
+        let tabela = document.getElementById("corpo-tabela");
+
+        tabela.innerHTML = ` <tr class="linha-mensagem"> <td colspan="6">Nenhum usuário cadastrado!</td> </tr> `
+    } else {
+
+        montarTabela(listaUsuarios);
+    }
+}
+
+
+window.addEventListener('DOMContentLoaded', () => carregarUsuarios());
+
+// Passo 7 - Montar a tabela
+
+function montarTabela(listaDeCadastrados) {
+    let tabela = document.getElementById("corpo-tabela");
+
+    let template = '';
+
+    listaDeCadastrados.forEach(pessoa => {
+
+        template +=
+            ` <tr>
+            <td data-cell="nome">${pessoa.nome}</td>
+            <td data-cell="altura">${pessoa.altura}</td>
+            <td data-cell="peso">${pessoa.peso}</td>
+            <td data-cell="valor do IMC">${pessoa.imc}</td>
+            <td data-cell="classificação do IMC">${pessoa.classificacao}</td>
+            <td data-cell="data de cadastro">${pessoa.dataCadastro}</td>
+        </tr> `
+
+    });
+
+    tabela.innerHTML = template;
+}
+
+// passo 8 - Limpar local storage
+
+function deletarRegistros() {
+    localStorage.removeItem("usuariosCadastrados")
+    window.location.reload();
+}
